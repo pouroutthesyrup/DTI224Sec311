@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Change Calculator</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 8px 15px;
+            background-color: #ecf0f1;
+            color: #2c3e50;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .back-button:hover {
+            background-color: #bdc3c7;
+        }
+
+        .container h2 {
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .input-group {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        label {
+            font-weight: 600;
+        }
+
+        input[type="number"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            width: 100px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input[type="number"]:focus {
+            border-color: #3498db;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        button:active {
+            transform: scale(0.97);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #3498db;
+            color: #ffffff;
+            text-transform: uppercase;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f9fbfd;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <a href="index.html" class="back-button">← Back to Resume</a>
+        <h2>Change Calculator</h2>
+
+        <div class="input-group">
+            <label for="amountInput">Amount: </label>
+            <input type="number" id="amountInput" min="0" placeholder="0" />
+            <button onclick="computeChange()">Calculate</button>
+        </div>
+
+        <table id="resultTable" style="display:none;">
+            <thead>
+                <tr>
+                    <th>Denomination</th>
+                    <th>Count</th>
+                </tr>
+            </thead>
+            <tbody id="resultBody">
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function computeChange() {
+            const denominations = [1000, 500, 100, 50, 20, 10, 5, 2, 1];
+            const inputVal = document.getElementById("amountInput").value;
+            let remaining = parseInt(inputVal, 10);
+
+            if (Number.isNaN(remaining) || remaining < 0) {
+                alert("Please enter a valid positive amount.");
+                return;
+            }
+
+            const tbody = document.getElementById("resultBody");
+            tbody.innerHTML = "";
+
+            for (const denom of denominations) {
+                const count = Math.floor(remaining / denom);
+                remaining %= denom;
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${denom}</td>
+                        <td>${count}</td>
+                    </tr>
+                `;
+            }
+
+            document.getElementById("resultTable").style.display = "table";
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>KBU Distance Calculator</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        main {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 480px;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 8px 15px;
+            background-color: #ecf0f1;
+            color: #2c3e50;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .back-button:hover {
+            background-color: #bdc3c7;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        header h1 {
+            color: #2c3e50;
+            font-size: 22px;
+            margin-bottom: 8px;
+        }
+
+        header p {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        form div {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 6px;
+        }
+
+        label {
+            font-weight: 600;
+            font-size: 14px;
+            color: #2c3e50;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input[type="number"]:focus {
+            border-color: #3498db;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #3498db;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 5px;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        button:active {
+            transform: scale(0.97);
+        }
+
+        #result {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #eaf4fc;
+            border: 1px solid #3498db;
+        }
+
+        #result h2 {
+            color: #2c3e50;
+            font-size: 18px;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        #result article p {
+            font-size: 14px;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        #result article p:last-child {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <main>
+        <a href="index.html" class="back-button">← Back to Resume</a>
+        <header>
+            <h1>KBU Distance Calculator</h1>
+            <p>Base Location: Kasem Bundit University (Romklao Campus) [Lat: 13.7997, Lon: 100.7356]</p>
+            <p>Formula: Distance = sqrt(x^2 + y^2)</p>
+        </header>
+
+        <section>
+            <form onsubmit="event.preventDefault(); calculateDistance();">
+                <div>
+                    <label for="input-x">Enter Destination X (Latitude °N):</label>
+                    <input type="number" step="any" id="input-x" placeholder="e.g. 13.7563" required>
+                </div>
+                <div>
+                    <label for="input-y">Enter Destination Y (Longitude °E):</label>
+                    <input type="number" step="any" id="input-y" placeholder="e.g. 100.5018" required>
+                </div>
+                <button type="submit">Calculate Distance</button>
+            </form>
+        </section>
+
+        <section id="result" style="display: none;">
+            <h2>Results</h2>
+            <article>
+                <p id="base-coords"></p>
+                <p id="calc-formula"></p>
+                <p id="calc-result"></p>
+                <p id="calc-result-km"></p>
+                <p id="calc-result-miles"></p>
+            </article>
+        </section>
+    </main>
+
+    <script>
+        function calculateDistance() {
+            const kbuLat = 13.7997;
+            const kbuLon = 100.7356;
+
+            const destX = parseFloat(document.getElementById('input-x').value);
+            const destY = parseFloat(document.getElementById('input-y').value);
+
+            const resultSection = document.getElementById('result');
+            const baseCoordsP = document.getElementById('base-coords');
+            const calcFormulaP = document.getElementById('calc-formula');
+            const calcResultP = document.getElementById('calc-result');
+            const calcResultKmP = document.getElementById('calc-result-km');
+            const calcResultMilesP = document.getElementById('calc-result-miles');
+
+            const x = destX - kbuLat;
+            const y = destY - kbuLon;
+
+            const coordinateDistance = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+
+            const distanceKm = coordinateDistance * 111;
+            const distanceMiles = distanceKm * 0.621371;
+
+            baseCoordsP.innerHTML = `<strong>Base (KBU):</strong> Lat: ${kbuLat}, Lon: ${kbuLon}`;
+            calcFormulaP.innerHTML = `<strong>Formula Applied:</strong> sqrt((${x.toFixed(4)})&sup2; + (${y.toFixed(4)})&sup2;)`;
+            calcResultP.innerHTML = `<strong>Coordinate Distance =</strong> ${coordinateDistance.toFixed(4)} units`;
+            calcResultKmP.innerHTML = `<strong>Distance in Kilometers:</strong> ${distanceKm.toFixed(2)} km`;
+            calcResultMilesP.innerHTML = `<strong>Distance in Miles:</strong> ${distanceMiles.toFixed(2)} miles`;
+
+            resultSection.style.display = 'block';
+        }
+    </script>
+</body>
+
+</html>
